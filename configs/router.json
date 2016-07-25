@@ -1,0 +1,11 @@
+{
+	"init": "init/init.js",
+	"install": "install/install.js",
+	"uninstall": "uninstall/uninstall.js",
+	"build": "build/build.js",
+	"profile": "profile/profile.js",
+	"publish": "publish/publish.js",
+	"add": "addPackage/addPackage.js",
+	"remove": "removePackage/removePackage.js",
+	"start": "start/start.js"
+}

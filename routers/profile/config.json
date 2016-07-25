@@ -1,0 +1,31 @@
+{
+	"defaultProfile": {
+		"basePath": ".",
+		"releaseDir": "lib",
+		"releaseName": "",
+		"mini": true,
+		"selectorEngine": "lite",
+		"action": "release",
+		"stripConsole": "all",
+		"optimize": "shrinksafe",
+		"localeList": ["en-us"],
+
+		"packages": [],
+		"staticHasFeatures": {
+			"dojo-trace-api": false,
+			"dojo-log-api": false,
+			"dojo-publish-privates": false,
+			"dojo-sync-loader": false,
+			"dojo-xhr-factory": false,
+			"dojo-test-sniff": false
+		},
+		"layers": {}
+	},
+	"excludeReg": "system|app|comlib",
+	"defaultPackage": {
+		"name": "",
+		"description": "",
+		"version": "0.0.1",
+		"keywords": []
+	}
+}
