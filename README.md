@@ -109,8 +109,10 @@ Solar uses a number of open source projects to work properly:
    [minimist]:<https://www.npmjs.com/package/minimist>
    [lodash]:<https://lodash.com/>
 
-And of course Solar itself is open source with a [public repository][dill]
+And of course Solar itself is open source with a [public repository]
  on GitHub.
+ 
+[public repository]:<https://github.com/qudi15/solar>
 
 ### Todos
 
