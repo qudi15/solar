@@ -12,7 +12,7 @@ Solar requires [Node.js](https://nodejs.org/) v4+ to run.
 You need Solar installed globally:
 
 ```sh
-$ npm solar -g
+$ npm solar-cli -g
 ```
 
 ### Apis
