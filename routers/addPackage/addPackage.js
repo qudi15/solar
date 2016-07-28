@@ -17,7 +17,7 @@ exports = module.exports = function() {
 	/*
 	 *	检查有效
 	 */
-	var name = location = identityName = modulePath = '';
+	var name = location = identityName && identityName = modulePath = '';
 	if (typeof argv['n'] === 'string') {
 		name = argv['n'];
 		this.log.writeln('name: ', name);
@@ -35,15 +35,11 @@ exports = module.exports = function() {
 	if (typeof argv['i'] === 'string') {
 		identityName = argv['i'];
 		this.log.writeln('identityName: ', identityName);
-	} else {
-		throw new Error('missing package identityName.');
 	}
 
 	if (typeof argv['p'] === 'string') {
 		modulePath = argv['p'];
 		this.log.writeln('modulePath: ', modulePath);
-	} else {
-		throw new Error('missing package modulePath.');
 	}
 	this.log.writeln('');
 
@@ -59,7 +55,7 @@ exports = module.exports = function() {
 				var packages = [];
 				var result = [];
 				_dojoConfig = cache.query('localDojoConfig');
-				if(!_dojoConfig){
+				if (!_dojoConfig) {
 					eval(fs.readFileSync(dojoConfigPath, 'utf-8'));
 					_dojoConfig = dojoConfig;
 				}
@@ -87,45 +83,47 @@ exports = module.exports = function() {
 	})();
 
 	/*
-	 *	更新dojoConfig.js
+	 *	更新packagesscript.js
 	 */
-	this.log.subhead('update packagesscript..');
-	var packagesScriptPath = path.join(cwd, 'packagesscript.js');
-	var _packagesScript = [];
-	(function() {
-		if (fs.existsSync(packagesScriptPath)) {
-			try {
-				var packages = [];
-				var result = [];
-				_packagesScript = cache.query('localPackagesScript');
-				if(!_packagesScript){
-					eval(fs.readFileSync(packagesScriptPath, 'utf-8'));
-					_packagesScript = ismppacages;
-				}
-				result = _packagesScript.filter((_package) => {
-					return _package.identityName === identityName;
-				});
-				if (result.length) {
-					result[0].modulePath = modulePath;
-					result[0].isPackaged = false;
-				} else {
-					_packagesScript.push({
-						identityName: identityName,
-						isPackaged: false,
-						modulePath: modulePath
+	if (identityName && identityName) {
+		this.log.subhead('update packagesscript..');
+		var packagesScriptPath = path.join(cwd, 'packagesscript.js');
+		var _packagesScript = [];
+		(function() {
+			if (fs.existsSync(packagesScriptPath)) {
+				try {
+					var packages = [];
+					var result = [];
+					_packagesScript = cache.query('localPackagesScript');
+					if (!_packagesScript) {
+						eval(fs.readFileSync(packagesScriptPath, 'utf-8'));
+						_packagesScript = ismppacages;
+					}
+					result = _packagesScript.filter((_package) => {
+						return _package.identityName === identityName;
 					});
+					if (result.length) {
+						result[0].modulePath = modulePath;
+						result[0].isPackaged = false;
+					} else {
+						_packagesScript.push({
+							identityName: identityName,
+							isPackaged: false,
+							modulePath: modulePath
+						});
+					}
+					fs.writeFileSync(packagesScriptPath, [
+						'var', 'ismppacages', '=', JSON.stringify(_packagesScript, null, 2),
+						fs.readFileSync(path.join(__dirname, 'static.js'), 'utf-8')
+					].join(' '));
+					cache.update('localPackagesScript', _packagesScript);
+					me.log.writeln('update packagesscript done.');
+				} catch (e) {
+					me.log.writeln('update packagesscript error.', e.stack);
 				}
-				fs.writeFileSync(packagesScriptPath, [
-					'var', 'ismppacages', '=', JSON.stringify(_packagesScript, null, 2),
-					fs.readFileSync(path.join(__dirname, 'static.js'), 'utf-8')
-				].join(' '));
-				cache.update('localPackagesScript', _packagesScript);
-				me.log.writeln('update packagesscript done.');
-			} catch (e) {
-				me.log.writeln('update packagesscript error.', e.stack);
 			}
-		}
-	})();
+		})();
+	}
 
 	this.log.ok();
 };
