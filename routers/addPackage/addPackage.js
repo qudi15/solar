@@ -17,7 +17,7 @@ exports = module.exports = function() {
 	/*
 	 *	检查有效
 	 */
-	var name = location = identityName && identityName = modulePath = '';
+	var name = location = identityName = modulePath = '';
 	if (typeof argv['n'] === 'string') {
 		name = argv['n'];
 		this.log.writeln('name: ', name);
