@@ -1,6 +1,6 @@
 {
   "name": "solar-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "solar system for dojo development.",
   "main": "./lib/core.js",
   "scripts": {
@@ -18,5 +18,19 @@
   },
   "bin": {
     "solar": "bin/solar.js"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qudi15/solar.git"
+  },
+  "keywords": [
+    "dojo",
+    "npm",
+    "command"
+  ],
+  "bugs": {
+    "url": "https://github.com/qudi15/solar/issues"
+  },
+  "homepage": "https://github.com/qudi15/solar#readme"
 }

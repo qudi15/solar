@@ -2,9 +2,6 @@
 
 Resolve front-end development of automation tools, dojo build, Independent development, Dependency management, Version management.
 
-### Version
-0.0.1
-
 ### Installation
 
 Solar requires [Node.js](https://nodejs.org/) v4+ to run.
@@ -69,7 +66,7 @@ $ solar build -n 'packageName'
 > Mapping source to the entire project base on the arguments.
 #
 ```sh
-$ solar add -n 'packageName' -l 'location' -i 'identityName' -p 'modulePath'
+$ solar add -n 'packageName' -l 'location' [-i 'identityName' -p 'modulePath']
 ```
 
 -- remove package
