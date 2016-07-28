@@ -14,6 +14,7 @@ exports = module.exports = function() {
 	var env = this.env;
 	var cwd = env.cwd;
 	var docRoot = argv['n'];
+	var excludeReg = argv['e'];
 
 	/*
 	 *	检查参数
@@ -24,6 +25,12 @@ exports = module.exports = function() {
 
 	this.log.writeln('name: ', docRoot);
 
+	if (typeof excludeReg === 'string'){
+		this.log.writeln('exclude: ', excludeReg);
+	}else{
+		excludeReg = '';
+	}
+
 	/*
 	 *	load config
 	 */
@@ -33,7 +40,6 @@ exports = module.exports = function() {
 		this.log.writeln('       generate profile.js start.');
 		var config = this.file.readJSON(path.join(__dirname, './config.json'))
 		var defaultOption = config.defaultProfile;
-		var excludeReg = config.excludeReg;
 		var defaultPackage = config.defaultPackage;
 
 		/*
@@ -57,7 +63,7 @@ exports = module.exports = function() {
 		var layerExclude = [];
 		var layerExcludeMap = {};
 
-		var regStr = excludeReg.split('|').filter((name) => {
+		var regStr = excludeReg.split(',').filter((name) => {
 			return name !== docRoot;
 		}).join('|');
 		var reg = new RegExp(['(^', regStr, ')'].join(''));
@@ -65,7 +71,7 @@ exports = module.exports = function() {
 		Object.keys(depTree).forEach((filePath) => {
 			var deps = depTree[filePath];
 			deps.forEach((depPath) => {
-				if (reg.test(depPath) && !layerExcludeMap[depPath]) {
+				if (excludeReg && reg.test(depPath) && !layerExcludeMap[depPath]) {
 					layerExcludeMap[depPath] = true;
 					layerExclude.push(depPath);
 				}
@@ -88,13 +94,6 @@ exports = module.exports = function() {
 			name: 'dojox',
 			location: 'node_modules/dojox'
 		});
-
-		defaultOption.packages = defaultOption.packages.concat(regStr.split('|').map((name) => {
-			return {
-				name: name,
-				location: 'node_modules/'.concat(name)
-			}
-		}));
 
 		/*
 		 *  write profile

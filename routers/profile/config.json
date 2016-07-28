@@ -21,7 +21,6 @@
 		},
 		"layers": {}
 	},
-	"excludeReg": "system|app|comlib",
 	"defaultPackage": {
 		"name": "",
 		"description": "",
