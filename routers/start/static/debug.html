@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.0">
         <!-- Date: 2015-05-14 -->
         <style type="text/css" title="text/css">
-            html, body {margin: 0;padding: 0;width: 100%;height: 100% !important;background: #333 url(../Framework/system/application/view/images/bg-loader.gif) no-repeat 50% 40% !important;background-repeat: no-repeat;}
+            html, body {margin: 0;padding: 0;width: 100%;height: 100% !important;background: #333 url(/sales/Framework/system/application/view/images/bg-loader.gif) no-repeat 50% 40% !important;background-repeat: no-repeat;}
             body .app_container {margin: 0px;padding: 0px;height: 100%;width: 100%;visibility: visible;}
         </style>
         <link rel="stylesheet" href="/sales/console/css/reset.css" rel="stylesheet" type="text/css" />
@@ -31,7 +31,7 @@
 
         <script>
             //require package class
-            require(['dijit/dijit', 'dojox/dojox', 'gridx/gridx', 'dojo/i18n', 'system/system','comlib/comlib','app/app'], function() {
+            require(['system/system','comlib/comlib','app/app'], function() {
                 // start up system framework
                 require(["dojo/request", "dojo/dom", "dojo/parser", "system/application/startup", "dojo/domReady!"], function(request, dom, parser) {
                     // Invoke the dojo/parser
