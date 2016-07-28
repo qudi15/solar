@@ -6,7 +6,7 @@
 		"mini": true,
 		"selectorEngine": "lite",
 		"action": "release",
-		"stripConsole": "all",
+		"stripConsole": "normal",
 		"optimize": "shrinksafe",
 		"localeList": ["en-us"],
 
