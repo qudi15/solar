@@ -73,7 +73,7 @@ $ solar add -n 'packageName' -l 'location' [-i 'identityName' -p 'modulePath']
 > Remove(Restore) the mapping.
 #
 ```sh
-$ solar remove -n 'packageName' -i 'identityName'
+$ solar remove -n 'packageName' [-i 'identityName']
 ```
 
 -- publish package

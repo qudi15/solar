@@ -28,9 +28,8 @@ exports = module.exports = function() {
 	if (typeof argv['i'] === 'string') {
 		identityName = argv['i'];
 		this.log.writeln('identityName: ', identityName);
-	} else {
-		throw new Error('missing package identityName.');
 	}
+
 	this.log.writeln('');
 
 	/*
@@ -81,6 +80,11 @@ exports = module.exports = function() {
 	/*
 	 *	packagesscript.js
 	 */
+	
+	if(!identityName){
+		return this.log.ok();
+	}
+
 	this.log.subhead('update packagesscript..');
 	var packagesScriptPath = path.join(cwd, 'packagesscript.js');
 	var _packagesScript = [];
