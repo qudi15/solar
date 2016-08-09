@@ -29,6 +29,27 @@ exports = module.exports = function() {
 	this.log.subhead('Init Start..');
 	this.log.writeln('');
 
+	var me = this;
+
+	function installPackages(cb) {
+		var child = {
+			cmd: 'npm',
+			args: ['install'],
+			opts: {
+				cwd: cwd,
+				stdio: 'inherit'
+			}
+		};
+
+		this.log.writeln('Start to install packages.');
+		me.util.spawn(child, function(err) {
+			if (err) {
+				throw err;
+			}
+			cb && cb();
+		});
+	}
+
 	function downloadAndGenerate(template) {
 		var tmp = '/tmp/dst-template-' + uid()
 		var spinner = ora('downloading template')
@@ -44,7 +65,9 @@ exports = module.exports = function() {
 			generate(name, tmp, to, function(err) {
 				if (err) logger.fatal(err)
 				console.log()
-				logger.success('Generated "%s".', name)
+				installPackages(function () {
+					logger.success('Generated Done');
+				});
 			})
 		})
 	}
