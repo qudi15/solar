@@ -1,61 +1,72 @@
 const fs = require('fs');
 const path = require('path');
 
+var download = require('download-git-repo');
+var exists = fs.existsSync;
+var rm = require('rimraf').sync;
+var uid = require('uid');
+var ora = require('ora');
+var chalk = require('chalk');
+var inquirer = require('inquirer');
+var request = require('request');
+var logger = require('../../lib/logger');
+var generate = require('../../lib/generate');
+var checkVersion = require('../../lib/check-version');
+
+const template = 'IBM-DST/dev-template';
+
 exports = module.exports = function() {
 	var argv = this.argv;
 	var env = this.env;
 	var cwd = env.cwd;
 
-	var name = desc  = '';
+	var name = desc = '';
 	var version = '0.0.1';
+
+	var to = path.resolve('.');
 
 	this.log.writeln('');
 	this.log.subhead('Init Start..');
 	this.log.writeln('');
 
-	/*
-	 *	检查有效
-	 */
-	if(typeof argv['n'] === 'string'){
-		name = argv['n'];
-		this.log.writeln('name: ', name);
-	}else{
-		throw new Error('missing package name..');
+	function downloadAndGenerate(template) {
+		var tmp = '/tmp/dst-template-' + uid()
+		var spinner = ora('downloading template')
+		spinner.start()
+		download(template, tmp, {
+			clone: false
+		}, function(err) {
+			spinner.stop()
+			process.on('exit', function() {
+				rm(tmp)
+			})
+			if (err) logger.fatal('Failed to download repo ' + template + ': ' + err.message.trim())
+			generate(name, tmp, to, function(err) {
+				if (err) logger.fatal(err)
+				console.log()
+				logger.success('Generated "%s".', name)
+			})
+		})
 	}
 
-	if(typeof argv['d'] === 'string'){
-		desc = argv['d'];
-		this.log.writeln('description: ', desc);
-	}else{
-		throw new Error('missing package description..');
+	function checkDistBranch(template, cb) {
+		request({
+			url: 'https://api.github.com/repos/' + template + '/branches',
+			headers: {
+				'User-Agent': 'solar-cli'
+			}
+		}, function(err, res, body) {
+			if (err) logger.fatal(err)
+			if (res.statusCode !== 200) {
+				logger.fatal('Template does not exist: ' + template)
+			} else {
+				var hasDist = JSON.parse(body).some(function(branch) {
+					return branch.name === 'dist'
+				})
+				return cb(hasDist ? template + '#dist' : template)
+			}
+		})
 	}
 
-	if(typeof argv['v'] === 'string'){
-		version = argv['v'];
-	}
-	this.log.writeln('version: ', version);
-	this.log.writeln('');
-
-	this.log.subhead('start merge arguments..');
-	/*
-	 *	赋值
-	 */
-	var sourcePackagePath = path.join(__dirname, 'package.json');
-	var sourcePackage = this.file.readJSON(sourcePackagePath);
-	var projectPackagePath = path.join(cwd, 'package.json');
-	sourcePackage.name = name;
-	sourcePackage.description = desc;
-	sourcePackage.version = version;
-
-	this.log.writeln('merge done.');
-
-	/*
-	 *	写文件
-	 */
-	this.log.subhead('start write file..');
-	fs.writeFileSync(projectPackagePath, JSON.stringify(sourcePackage, null, 2));
-	this.log.writeln('write done.');
-
-	this.log.writeln('');
-	this.log.ok();
+	checkDistBranch(template, downloadAndGenerate);
 };
