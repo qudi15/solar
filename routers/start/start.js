@@ -20,22 +20,16 @@ exports = module.exports = function() {
 	var env = this.env;
 	var cwd = env.cwd;
 
+	var port = 8080;
+
 	var localFlag = false;
 
 	if(typeof argv['local'] === 'boolean'){
 		localFlag = argv['local'];
 	}
 
-	/*
-	 *	拷贝./static/* 到 <cwd>/
-	 */
-
-	this.log.subhead('start copy static files to your folder..');
-	var staticFolder = path.join(__dirname, './static');
-	try {
-		fse.copySync(staticFolder, cwd);
-	} catch (err) {
-		return false;
+	if(typeof argv['p'] !== 'undefined' && !isNaN(argv['p'])){
+		port = argv['p'];
 	}
 
 	/*
@@ -87,5 +81,11 @@ exports = module.exports = function() {
 	cache.update('dojoConfig', _dojoConfig);
 	cache.update('packagesScript', _packagesScript);
 
-	this.log.ok();
+	var serverPath = path.join(cwd, 'build/dev-server.js');
+
+	if(fs.existsSync(serverPath)){
+		require(serverPath)(port, cwd);
+	}else{
+		this.log.writeln('Please init project first.');
+	}
 };
